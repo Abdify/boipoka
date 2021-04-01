@@ -16,7 +16,9 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect((err) => {
     console.log("Errors found: ", err);
     const booksCollection = client.db(process.env.DB_NAME).collection("books");
-    const ordersCollection = client.db(process.env.DB_NAME).collection("orderedBooks");
+    const ordersCollection = client
+        .db(process.env.DB_NAME_ORDERED_BOOKS)
+        .collection("orderedBooks");
 
     
 
@@ -63,6 +65,7 @@ client.connect((err) => {
             res.send(result.insertedCount > 0);
         })
         .catch(err => {
+            console.log(err);
             res.send(false);
         })
     });
