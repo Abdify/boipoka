@@ -21,7 +21,7 @@ client.connect((err) => {
         .collection("orderedBooks");
 
     
-
+    //get requests
     app.get("/books", (req, res) => {
         booksCollection.find({}).toArray((err, books) => {
             res.send(books);
@@ -45,14 +45,13 @@ client.connect((err) => {
     
     app.get("/orderedBooksByUser", (req, res) => {
         const userEmail = req.headers.currentuser;
-        // console.log(userEmail);
         ordersCollection.find({ orderedBy: userEmail }).toArray((err, books) => {
             res.send(books);
         });
     });
 
 
-
+    //post requests
     app.post("/addBook", (req, res) => {
         const newBook = req.body;
         booksCollection.insertOne(newBook).then((result) => {
@@ -71,7 +70,7 @@ client.connect((err) => {
     });
 
     
-
+    //delete requests
     app.delete("/books/:id", (req, res) => {
         const id = req.params.id;
         booksCollection
