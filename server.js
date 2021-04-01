@@ -46,7 +46,7 @@ client.connect((err) => {
     app.get("/orderedBooksByUser", (req, res) => {
         const userEmail = req.headers.currentuser;
         // console.log(userEmail);
-        ordersCollection.find({ email: userEmail }).toArray((err, books) => {
+        ordersCollection.find({ orderedBy: userEmail }).toArray((err, books) => {
             res.send(books);
         });
     });
