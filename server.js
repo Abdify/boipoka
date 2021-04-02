@@ -20,7 +20,6 @@ client.connect((err) => {
         .db(process.env.DB_NAME_ORDERED_BOOKS)
         .collection("orderedBooks");
 
-    
     //get requests
     app.get("/books", (req, res) => {
         booksCollection.find({}).toArray((err, books) => {
@@ -42,14 +41,13 @@ client.connect((err) => {
             res.send(books);
         });
     });
-    
+
     app.get("/orderedBooksByUser", (req, res) => {
         const userEmail = req.headers.currentuser;
         ordersCollection.find({ orderedBy: userEmail }).toArray((err, books) => {
             res.send(books);
         });
     });
-
 
     //post requests
     app.post("/addBook", (req, res) => {
@@ -60,16 +58,18 @@ client.connect((err) => {
     });
     app.post("/orderBook", (req, res) => {
         const orderedBook = req.body;
-        ordersCollection.insertOne(orderedBook).then((result) => {
-            res.send(result.insertedCount > 0);
-        })
-        .catch(err => {
-            console.log(err);
-            res.send(false);
-        })
+
+        ordersCollection
+            .insertOne(orderedBook)
+            .then((result) => {
+                res.send(result.insertedCount > 0);
+            })
+            .catch((err) => {
+                console.log(err);
+                res.send(false);
+            });
     });
 
-    
     //delete requests
     app.delete("/books/:id", (req, res) => {
         const id = req.params.id;
