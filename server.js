@@ -28,7 +28,7 @@ client.connect((err) => {
     });
 
     app.get("/books/:id", (req, res) => {
-        console.log(req.params.id);
+        // console.log(req.params.id);
         booksCollection.findOne({ _id: ObjectId(req.params.id) }).then((book) => {
             res.send(book);
         });
@@ -70,6 +70,15 @@ client.connect((err) => {
             });
     });
 
+    app.post('/searchBooks', (req, res) => {
+        const query = req.body.query;
+        var re = new RegExp(`.*${query}.*`, "i");
+        booksCollection.find({name: {$regex: re}})
+        .toArray( (err, books) => {
+            res.send(books);
+        })
+    })
+
     //delete requests
     app.delete("/books/:id", (req, res) => {
         const id = req.params.id;
@@ -99,5 +108,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Listening to port ${port}`);
 });
